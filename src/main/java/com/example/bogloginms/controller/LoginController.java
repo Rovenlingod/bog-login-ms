@@ -1,6 +1,7 @@
 package com.example.bogloginms.controller;
 
 import com.example.bogloginms.dto.LoginRequestDTO;
+import com.example.bogloginms.feign.feignDto.UserDTO;
 import com.example.bogloginms.service.LoginService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,4 +21,8 @@ public class LoginController {
         return ResponseEntity.ok().body(loginService.login(loginRequestDTO));
     }
 
+    @GetMapping("/validateToken")
+    public ResponseEntity<String> validateToken(@RequestParam String token) {
+        return ResponseEntity.ok().body(loginService.validateToken(token));
+    }
 }
