@@ -1,6 +1,7 @@
 package com.example.bogloginms.service;
 
 import com.example.bogloginms.dto.LoginRequestDTO;
+import com.example.bogloginms.exception.UnauthorisedException;
 import com.example.bogloginms.exception.WrongLoginOrPasswordException;
 import com.example.bogloginms.feign.UserServiceFeign;
 import com.example.bogloginms.feign.feignDto.UserDTO;
@@ -34,5 +35,19 @@ public class LoginServiceImpl implements LoginService {
         }
 
         return jwtTokenProvider.createToken(loginRequestDTO.getLogin());
+    }
+
+    /**
+     * Validates JWT token
+     * @param token JWT token
+     * @return username bound to the token
+     */
+    @Override
+    public String validateToken(String token) {
+        if (jwtTokenProvider.validateToken(token)) {
+            return jwtTokenProvider.getUsername(token);
+        } else {
+            throw new UnauthorisedException("Provided token is invalid");
+        }
     }
 }
