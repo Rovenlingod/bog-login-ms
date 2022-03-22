@@ -6,6 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -24,6 +25,11 @@ public class LoggingAspect {
     @AfterReturning("execution(* com.example.bogloginms.service.LoginService.login(..)) && args(loginRequestDTO)")
     public void logLogin(JoinPoint joinPoint, LoginRequestDTO loginRequestDTO) {
         log.info("User with username \"" + loginRequestDTO.getLogin() + "\" logged in successfully.");
+    }
+
+    @AfterReturning(value = "execution(* com.example.bogloginms.service.CustomOidcUserService.loadUser(..))", returning = "user")
+    public void logLogin(JoinPoint joinPoint, OidcUser user) {
+        log.info("User with username \"" + user.getAttribute("email") + "\" logged in successfully using google oauth.");
     }
 
     @AfterReturning(value = "execution(* com.example.bogloginms.controller.LoginController.validateToken(..))", returning = "username")
