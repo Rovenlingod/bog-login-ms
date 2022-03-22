@@ -25,4 +25,5 @@ public class LoginController {
     public ResponseEntity<String> validateToken(@RequestParam String token) {
         return ResponseEntity.ok().body(loginService.validateToken(token));
     }
+
 }

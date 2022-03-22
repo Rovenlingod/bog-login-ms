@@ -22,10 +22,16 @@ public class LoginServiceImpl implements LoginService {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
+    /**
+     * Authenticates user
+     * @param loginRequestDTO contains login and password
+     * @return JWT token
+     * @exception WrongLoginOrPasswordException if user doesn't exist
+     * @exception WrongLoginOrPasswordException if password is wrong
+     */
     @Override
     public String login(LoginRequestDTO loginRequestDTO) {
         UserDTO user = userServiceFeign.getUserByLogin(loginRequestDTO.getLogin());
-
         if (Objects.isNull(user)) {
             throw new WrongLoginOrPasswordException("Provided credentials are wrong");
         }
